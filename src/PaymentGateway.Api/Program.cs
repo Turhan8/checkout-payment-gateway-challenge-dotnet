@@ -1,15 +1,22 @@
+using AcquiringBank.Service;
 using PaymentGateway.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add configuration sources
+builder.Configuration.AddEnvironmentVariables();
 
+// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+//     {
+//         options.SuppressModelStateInvalidFilter = true;
+//     }); ;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddSingleton<PaymentsRepository>();
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IPaymentsRepository, PaymentsRepository>();
+builder.Services.AddSingleton<IAcquiringBankWrapper, AcquiringBankWrapper>();
 
 var app = builder.Build();
 

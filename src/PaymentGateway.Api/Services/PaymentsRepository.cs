@@ -2,17 +2,28 @@
 
 namespace PaymentGateway.Api.Services;
 
-public class PaymentsRepository
+public interface IPaymentsRepository
 {
-    public List<PostPaymentResponse> Payments = new();
-    
+    void Add(PostPaymentResponse payment);
+    Task<PostPaymentResponse?> GetAsync(Guid id);
+}
+
+public class PaymentsRepository : IPaymentsRepository
+{
+    private readonly List<PostPaymentResponse> Payments = new();
+
     public void Add(PostPaymentResponse payment)
     {
+        if (payment == null)
+        {
+            throw new ArgumentNullException(nameof(payment));
+        }
         Payments.Add(payment);
     }
 
-    public PostPaymentResponse Get(Guid id)
+    public Task<PostPaymentResponse?> GetAsync(Guid id)
     {
-        return Payments.FirstOrDefault(p => p.Id == id);
+        var payment = Payments.FirstOrDefault(p => p.Id == id);
+        return Task.FromResult(payment);
     }
 }

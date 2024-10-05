@@ -4,5 +4,7 @@ public enum PaymentStatus
 {
     Authorized,
     Declined,
-    Rejected
+    Rejected,
+    GatewayError,
+    BankError
 }
